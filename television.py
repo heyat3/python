@@ -1,80 +1,95 @@
 class Television:
-    '''
+    """
     A class representing the functions of a television
-    '''
+    """
+    #class variables
     MIN_VOLUME = 0
     MAX_VOLUME = 2
     MIN_CHANNEL = 0
     MAX_CHANNEL = 3
 
-    '''
-    constructor method to initialize instance variables
-    '''
+
     def __init__(self):
+        """
+        constructor method to initialize instance variables
+        """
+        #instance variables (private)
         self.__status = False
         self.__muted = False
-        self.__volume = self.MIN_VOLUME
-        self.__channel = self.MIN_CHANNEL
+        self.__volume = Television.MIN_VOLUME
+        self.__channel = Television.MIN_CHANNEL
 
-    '''
-    power method changes status variable to true or false depending if television is on or off
-    '''
+
     def power(self):
-        if self.__status:
+        """
+        toggle power status of television
+        """
+        '''if self.__status:
             self.__status = False
         else:
-            self.__status = True
+            self.__status = True'''
 
-    '''
-    mure method changes muted variable to true or false depending if television is muted
-    '''
+        self.__status = not self.__status
+
+
     def mute(self):
-        if self.__muted:
-            self.__muted = False
-        else:
-            self.__muted = True
-            self.__volume = 0
-
-    '''
-    channel up and down change channel variable up or down
-    set channel to minimum or maximum respectively if over maximum or minimum
-    '''
-    def channel_up(self):
+        """
+        toggle mute status if television is on
+        """
         if self.__status:
-            if self.__channel < self.MAX_CHANNEL:
+            if not self.__muted:
+                self.__temp_volume = self.__volume
+                self.__volume = 0
+                #self.__muted = True
+            else:
+                self.__volume = self.__temp_volume
+                #self.__muted = False
+            self.__muted = not self.__muted
+
+    def channel_up(self):
+        """
+        increase channel, set to MIN_CHANNEL at MAX_CHANNEL
+        """
+        if self.__status:
+            if self.__channel < Television.MAX_CHANNEL:
                 self.__channel += 1
             else:
-                self.__channel = self.MIN_CHANNEL
+                self.__channel = Television.MIN_CHANNEL
 
     def channel_down(self):
+        """
+        decrease channel, set to MAX_CHANNEL at MIN_CHANNEL
+        """
         if self.__status:
-            if self.__channel > self.MIN_CHANNEL:
+            if self.__channel > Television.MIN_CHANNEL:
                 self.__channel -= 1
             else:
-                self.__channel = self.MAX_CHANNEL
+                self.__channel = Television.MAX_CHANNEL
 
-    '''
-        volume up and down change volume variable up or down
-        set volume to maximum or minimum respectively if over maximum or minimum
-    '''
     def volume_up(self):
-        self.__muted = False
+        """
+        increase volume, unmutes if muted
+        """
         if self.__status:
-            if self.__volume < self.MAX_VOLUME:
+            if self.__muted:
+                self.__muted = False
+                self.__volume = self.__temp_volume
+            if self.__volume < Television.MAX_VOLUME:
                 self.__volume += 1
-            else:
-                self.__volume = self.MAX_VOLUME
 
     def volume_down(self):
-        self.__muted = False
+        """
+        decrease volume, unmutes if muted
+        """
         if self.__status:
-            if self.__volume > self.MIN_VOLUME:
+            if self.__muted:
+                self.__muted = False
+                self.__volume = self.__temp_volume
+            if self.__volume > Television.MIN_VOLUME:
                 self.__volume -= 1
-            else:
-                self.__volume = self.MIN_VOLUME
 
-    '''
-    :return: Power = [status], Channel = [channel], Valume = [volume]
-    '''
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        :return: television status as formatted string
+        """
         return f'Power = {self.__status}, Channel = {self.__channel}, Volume = {self.__volume}'
